@@ -1,0 +1,8 @@
+//
+//  AlertPresenter.swift
+//  MovieQuiz
+//
+//  Created by Gregory Vanyurin on 05.02.2025.
+//
+
+import Foundation

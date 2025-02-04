@@ -110,18 +110,28 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func showNextQuestionOrResults() {
-
+        
+        let alertPresenter = AlertPresenter(viewController: self)
+        
         if currentQuestionIndex == questionsAmount - 1 {
             let text = correctAnswers == questionsAmount ?
-                "Поздравляем, вы ответили на 10 из 10!" :
-                "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+            "Поздравляем, вы ответили на 10 из 10!" :
+            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
             
-            let resultsViewModel = QuizResultsViewModel(
+            let alertModel = AlertModel(
                 title: "Раунд окончен!",
-                text: text,
-                buttonText: "Сыграть еще раз"
+                message: text,
+                buttonText: "Сыграть еще раз",
+                completion: { [weak self] in
+                    self?.questionFactory?.requestNextQuestion()
+                }
+                
             )
-            self.show(quiz: resultsViewModel)
+            
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            
+            alertPresenter.showAlert(model: alertModel)
             
             imageView.layer.borderWidth = 0
             
@@ -134,25 +144,4 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
         }
     }
-    
-    private func show(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(title: result.title,
-                                      message: result.text,
-                                      preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: "Сыграть еще раз", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            
-            self.questionFactory?.requestNextQuestion()
-        }
-        
-        alert.addAction(action)
-        
-        self.present(alert, animated: true, completion: nil)
-    }
 }
-
-
