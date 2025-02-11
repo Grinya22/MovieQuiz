@@ -141,13 +141,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let totalAccuracy = String(format: "%.2f", statisticService.totalAccuracy)
         let bestGame = statisticService.bestGame
         
-        let dateString = GameResult.dateFormatter.string(from: bestGame.date)
-        
         if currentQuestionIndex == questionsAmount - 1 {
             let text = """
                 Ваш результат: \(correctAnswers) из \(questionsAmount)
                 Количество сыгранных квизов: \(statisticService.gamesCount)
-                Рекорд: \(bestGame.correct) из \(questionsAmount) (дата: \(dateString))
+                Рекорд: \(bestGame.correct) из \(questionsAmount) (\(bestGame.date.dateTimeString))
                 Средняя точность: \(totalAccuracy)%
             """
             
