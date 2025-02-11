@@ -19,6 +19,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     
+    var statisticService: StatisticServiceProtocol!
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -30,6 +32,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         questionFactory.requestNextQuestion()
         
+        statisticService = StatisticService()
+        
 //        show(
 //            quiz: convert(
 //                model: questions[currentQuestionIndex]
@@ -37,6 +41,25 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 //        )
 //
     }
+    
+    // MARK: - UserDefaults
+    
+    let date = UserDefaults.standard.object(forKey: "bestGame.date") as? Date ?? Date()
+    
+//    func dictionaryRepresentation() -> [String: Any] {}
+//
+//    // Получаем словарь всех значений
+//    let allValues = UserDefaults.standard.dictionaryRepresentation()
+//
+//    // Печатаем или обрабатываем все ключи и значения
+//    for (key, value) in allValues {
+//        print("\(key) - \(value)")
+//    }
+//
+//    // Получаем все ключи словаря, затем в цикле удаляем их
+//    allValues.keys.forEach { key in
+//        UserDefaults.standard.removeObject(forKey: key)
+//    }
     
     // MARK: - QuestionFactoryDelegate
     
@@ -111,15 +134,27 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNextQuestionOrResults() {
         
+        //statisticService.resetStatistics() //перезаписать на пустую всю инфу из UserDefaults
+        
         let alertPresenter = AlertPresenter(viewController: self)
         
+        let totalAccuracy = String(format: "%.2f", statisticService.totalAccuracy)
+        let bestGame = statisticService.bestGame
+        
+        let dateString = GameResult.dateFormatter.string(from: bestGame.date)
+        
         if currentQuestionIndex == questionsAmount - 1 {
-            let text = correctAnswers == questionsAmount ?
-            "Поздравляем, вы ответили на 10 из 10!" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+            let text = """
+                Ваш результат: \(correctAnswers) из \(questionsAmount)
+                Количество сыгранных квизов: \(statisticService.gamesCount)
+                Рекорд: \(bestGame.correct) из \(questionsAmount) (дата: \(dateString))
+                Средняя точность: \(totalAccuracy)%
+            """
+            
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
             
             let alertModel = AlertModel(
-                title: "Раунд окончен!",
+                title: "Этот раунд окончен!",
                 message: text,
                 buttonText: "Сыграть еще раз",
                 completion: { [weak self] in
@@ -145,3 +180,4 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
 }
+

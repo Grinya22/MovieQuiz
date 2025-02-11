@@ -5,7 +5,6 @@
 //  Created by Gregory Vanyurin on 03.02.2025.
 //
 
-import Foundation
 import UIKit
 
 struct QuizStepViewModel {
@@ -13,3 +12,4 @@ struct QuizStepViewModel {
     let question: String
     let questionNumber: String
 }
+
