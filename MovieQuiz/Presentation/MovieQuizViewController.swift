@@ -12,6 +12,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
@@ -26,13 +28,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let questionFactory = QuestionFactory()
-        questionFactory.setup(delegate: self)
-        self.questionFactory = questionFactory
-        
-        questionFactory.requestNextQuestion()
-        
+        imageView.layer.cornerRadius = 20
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+    
         statisticService = StatisticService()
+        
+        showLoadingIndicator()
+        questionFactory?.loadData()
         
 //        show(
 //            quiz: convert(
@@ -46,34 +48,28 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     let date = UserDefaults.standard.object(forKey: "bestGame.date") as? Date ?? Date()
     
-//    func dictionaryRepresentation() -> [String: Any] {}
-//
-//    // Получаем словарь всех значений
-//    let allValues = UserDefaults.standard.dictionaryRepresentation()
-//
-//    // Печатаем или обрабатываем все ключи и значения
-//    for (key, value) in allValues {
-//        print("\(key) - \(value)")
-//    }
-//
-//    // Получаем все ключи словаря, затем в цикле удаляем их
-//    allValues.keys.forEach { key in
-//        UserDefaults.standard.removeObject(forKey: key)
-//    }
-    
     // MARK: - QuestionFactoryDelegate
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
         }
-        
+
         currentQuestion = question
         let viewModel = convert(model: question)
-        
+
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
+    }
+    
+    func didLoadDataFromServer() {
+        hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
     }
     
     // MARK: - Actions
@@ -99,14 +95,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+        return QuizStepViewModel(
+            image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
-        )
-        return questionStep
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
-    
+
     private func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
@@ -118,7 +112,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderWidth = 8
         imageView.layer.cornerRadius = 6
         
-        if isCorrect == true {
+        if isCorrect == true && correctAnswers != 10 {
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
             correctAnswers += 1
             
@@ -177,5 +171,33 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
         }
     }
+    
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
+        activityIndicator.startAnimating() // включаем анимацию
+    }
+    
+    private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true // говорим, что индикатор загрузки не скрыт
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator()
+        
+        let alertPresenter = AlertPresenter(viewController: self)
+        
+        let model = AlertModel(title: "Ошибка",
+                               message: message,
+                               buttonText: "Попробовать еще раз") { [weak self] in
+            guard let self = self else { return }
+            
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            
+            self.questionFactory?.requestNextQuestion()
+        }
+        
+        alertPresenter.showAlert(model: model)
+    }    
 }
 
