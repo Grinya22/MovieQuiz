@@ -5,81 +5,84 @@
 //  Created by Gregory Vanyurin on 19.02.2025.
 //
 
-import XCTest
+/*
+ import XCTest
 
-struct ArithmeticOperations {
-    func addition(num1: Int, num2: Int) -> Int {
-        return num1 + num2
-    }
-    
-    func subtraction(num1: Int, num2: Int) -> Int {
-        return num1 - num2
-    }
-    
-    func multiplication(num1: Int, num2: Int) -> Int {
-        return num1 * num2
-    }
-}
+ struct ArithmeticOperations {
+     func addition(num1: Int, num2: Int) -> Int {
+         return num1 + num2
+     }
+     
+     func subtraction(num1: Int, num2: Int) -> Int {
+         return num1 - num2
+     }
+     
+     func multiplication(num1: Int, num2: Int) -> Int {
+         return num1 * num2
+     }
+ }
 
-struct ArithmeticOperationsAsync {
-    func addition(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            handler(num1 + num2)
-        }
-    }
-    
-    func subtraction(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            handler(num1 - num2)
-        }
-    }
-    
-    func multiplication(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            handler(num1 * num2)
-        }
-    }
-}
+ struct ArithmeticOperationsAsync {
+     func addition(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
+         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+             handler(num1 + num2)
+         }
+     }
+     
+     func subtraction(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
+         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+             handler(num1 - num2)
+         }
+     }
+     
+     func multiplication(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
+         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+             handler(num1 * num2)
+         }
+     }
+ }
 
-class MovieQuizTests: XCTestCase {
-    
-    func testAddition() throws {
-//         let arithmeticOperations = ArithmeticOperations()
-//         let result = arithmeticOperations.addition(num1: 1, num2: 2)
-//         XCTAssertEqual(result, 3) // сравниваем результат выполнения функции и наши ожидания
+ class MovieQuizTests: XCTestCase {
+     
+     func testAddition() throws {
+ //         let arithmeticOperations = ArithmeticOperations()
+ //         let result = arithmeticOperations.addition(num1: 1, num2: 2)
+ //         XCTAssertEqual(result, 3) // сравниваем результат выполнения функции и наши ожидания
+         
+         // Given
+         // Given/Дано — это состояние, когда мы получаем начальные данные, с которыми будем работать.
+         let arithmeticOperations = ArithmeticOperations()
+         let num1 = 1
+         let num2 = 2
+         
+         // When
+         // When/Когда — действие, которое мы собираемся тестировать, когда оно уже произошло.
+         let result = arithmeticOperations.addition(num1: num1, num2: num2)
+         
+         // Then
+         // When/Тогда — проверка действия, которое произошло.
+         XCTAssertEqual(result, 3)
+     }
+     
+     func testAdditionAsync() throws {
+         // Given
+         let arithmeticOperationsAsync = ArithmeticOperationsAsync()
+         let num1 = 1
+         let num2 = 2
+         
+         // When
+         let expectation = expectation(description: "Addition function expectation")
         
-        // Given
-        // Given/Дано — это состояние, когда мы получаем начальные данные, с которыми будем работать.
-        let arithmeticOperations = ArithmeticOperations()
-        let num1 = 1
-        let num2 = 2
-        
-        // When
-        // When/Когда — действие, которое мы собираемся тестировать, когда оно уже произошло.
-        let result = arithmeticOperations.addition(num1: num1, num2: num2)
-        
-        // Then
-        // When/Тогда — проверка действия, которое произошло.
-        XCTAssertEqual(result, 3)
-    }
-    
-    func testAdditionAsync() throws {
-        // Given
-        let arithmeticOperationsAsync = ArithmeticOperationsAsync()
-        let num1 = 1
-        let num2 = 2
-        
-        // When
-        let expectation = expectation(description: "Addition function expectation")
-       
-       arithmeticOperationsAsync.addition(num1: num1, num2: num2) { result in
-            // Then
-            XCTAssertEqual(result, 3)
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 2)
-    }
+        arithmeticOperationsAsync.addition(num1: num1, num2: num2) { result in
+             // Then
+             XCTAssertEqual(result, 3)
+             expectation.fulfill()
+         }
+         
+         waitForExpectations(timeout: 2)
+     }
+ */
+
 
 //    override func setUpWithError() throws { // перед каждым тестом
 //        // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -103,9 +106,7 @@ class MovieQuizTests: XCTestCase {
 //            // Put the code you want to measure the time of here.
 //        }
 //    }
-
-}
-
+//}
 
 /*
  XCTAssertNotEqual — сравниваем два результата и ожидаем, что они не равны

@@ -114,7 +114,7 @@ class QuestionFactory: QuestionFactoryProtocol {
 
             let rating = Float(movie.rating) ?? 0
 
-            let questionRating = Float.random(in: 4...8)
+            let questionRating = Float.random(in: 4...9)
 
             let text = "Рейтинг этого фильма больше, чем \(String(format: "%.1f", questionRating))?"
             let correctAnswer = rating > questionRating
