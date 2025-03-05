@@ -32,9 +32,19 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8F468DC128C4BAB900BE9EE9"
-               BuildableName = "MovieQuizTests.xctest"
-               BlueprintName = "MovieQuizTests"
+               BlueprintIdentifier = "D2E521272D6CFA5C00DBAB8C"
+               BuildableName = "MovieQuizTests1.xctest"
+               BlueprintName = "MovieQuizTests1"
+               ReferencedContainer = "container:MovieQuiz.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D2E521342D6CFA9C00DBAB8C"
+               BuildableName = "MovieQuizUITests1.xctest"
+               BlueprintName = "MovieQuizUITests1"
                ReferencedContainer = "container:MovieQuiz.xcodeproj">
             </BuildableReference>
          </TestableReference>

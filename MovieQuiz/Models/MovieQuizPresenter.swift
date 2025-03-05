@@ -14,9 +14,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private let statisticService: StatisticServiceProtocol!
     var currentQuestion: QuizQuestion?
     var questionFactory: QuestionFactoryProtocol?
-    weak var viewController: MovieQuizViewController?
+    weak var viewController: MovieQuizViewControllerProtocol?
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
         
         statisticService = StatisticService()
@@ -108,7 +108,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             questionFactory?.requestNextQuestion()
             
             sleep(1)
-            viewController?.imageView.layer.borderWidth = 0
+            viewController?.resetImageBorder()
         }
     }
     
